@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -44,9 +45,21 @@ def user_logout(request):
 @login_required(login_url="/login/")
 def employee_list(request):
     print(request.role)
-    context = {}
-    context['users'] = User.objects.all()
-    context['title'] = 'Employees'
+
+    query = request.GET.get('q')
+    users = User.objects.all()
+
+    if query:
+        users = users.filter(
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query)
+        )
+
+    context = {
+        'users': users,
+        'title': 'Employees'
+    }
     return render(request, 'employee/index.html', context)
 
 @login_required(login_url="/login/")
