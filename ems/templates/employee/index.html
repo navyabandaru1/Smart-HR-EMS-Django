@@ -7,6 +7,16 @@
     <div class="col-sm-8">
         <p>
             <div class="float-left"><h3>List of {{title}}</h3></div>
+<form method="get" class="form-inline mb-3">
+    <input
+        type="text"
+        name="q"
+        class="form-control mr-2"
+        placeholder="Search employee by name or email"
+        value="{{ request.GET.q }}"
+    >
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
             {% if request.role == 'Admin' %}
             <a class="btn btn-success float-right" href="{%  url 'employee_add' %}">Add employee</a>
             {% endif %}
